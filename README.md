@@ -1,4 +1,4 @@
-# 🌐 BroadbandX (FlexiSub) - AI-Powered Subscription Management System
+# 🌐 BroadbandX - AI-Powered Subscription Management System
 
 ![BroadbandX](https://img.shields.io/badge/BroadbandX-v2.0-blue.svg)
 ![MERN](https://img.shields.io/badge/MERN-Stack-green.svg)
@@ -475,21 +475,7 @@ npm run format                # Prettier code formatting
 - **Admin Users**: Full system administration, analytics, user management
 - **Customer Users**: Subscription management, billing, profile settings
 
-### **Demo Credentials**
-```bash
-# Admin Access
-Email: admin@flexisub.com
-Password: Admin@123
 
-# Customer Access  
-Email: customer@example.com
-Password: password123
-
-# Test Stripe Card (Development)
-Card Number: 4242 4242 4242 4242
-Expiry: Any future date
-CVC: Any 3-digit number
-```
 
 ## 🚀 **Deployment & Production**
 
