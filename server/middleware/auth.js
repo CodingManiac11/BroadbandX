@@ -16,8 +16,17 @@ const authenticateToken = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    // Get user from database
-    const user = await User.findById(decoded.id).select('-password');
+    // Get user from database with error handling
+    let user;
+    try {
+      user = await User.findById(decoded.id).select('-password');
+    } catch (dbError) {
+      console.error('Database error in authentication:', dbError);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Database connection error. Please try again.'
+      });
+    }
     
     if (!user) {
       return res.status(401).json({

@@ -94,14 +94,19 @@ export interface Subscription {
   status: 'active' | 'suspended' | 'cancelled' | 'pending';
   startDate: string;
   endDate: string;
+  nextBillingDate: string;
   billingCycle: 'monthly' | 'yearly';
+  autoRenewal: boolean;
+  paymentMethod?: string;
   pricing: {
     basePrice: number;
-    discountApplied: number;
+    discount: number;
+    tax: number;
     finalPrice: number;
-    currency: string;
-    taxAmount: number;
-    totalAmount: number;
+    currency?: string;
+    discountApplied?: number;
+    taxAmount?: number;
+    totalAmount?: number;
   };
   installation: {
     scheduled: boolean;

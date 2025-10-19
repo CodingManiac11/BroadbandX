@@ -5,6 +5,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const compression = require('compression');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 // Import routes
@@ -20,17 +22,32 @@ const pricingRoutes = require('./routes/pricing');
 // Import middleware
 const { errorHandler } = require('./middleware/errorHandler');
 const { authenticateToken } = require('./middleware/auth');
+const RealTimeEvents = require('./utils/realTimeEvents');
 
 const app = express();
+const server = createServer(app);
+
+// Socket.io setup with CORS
+const io = new Server(server, {
+  cors: {
+    origin: [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      process.env.FRONTEND_URL
+    ].filter(Boolean),
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 // Security middleware
 app.use(helmet());
 app.use(compression());
 
-// Rate limiting
+// Rate limiting - More lenient in development
 const limiter = rateLimit({
   windowMs: (process.env.RATE_LIMIT_WINDOW || 15) * 60 * 1000, // 15 minutes
-  max: process.env.RATE_LIMIT_MAX_REQUESTS || 100, // limit each IP to 100 requests per windowMs
+  max: process.env.NODE_ENV === 'development' ? 1000 : (process.env.RATE_LIMIT_MAX_REQUESTS || 100), // Higher limit for development
   message: {
     error: 'Too many requests from this IP, please try again later.',
   },
@@ -76,18 +93,81 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined'));
 }
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => {
-  console.log('✅ Connected to MongoDB Atlas');
-})
-.catch((error) => {
-  console.error('❌ MongoDB connection error:', error);
-  process.exit(1);
+// MongoDB connection with improved error handling and retry logic
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      // Connection pool settings
+      maxPoolSize: 10,
+      minPoolSize: 5,
+      maxIdleTimeMS: 30000,
+      // Timeout settings
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 10000,
+      // Retry settings
+      retryWrites: true,
+      retryReads: true,
+      // Heartbeat settings
+      heartbeatFrequencyMS: 10000,
+    });
+
+    console.log(`✅ Connected to MongoDB Atlas: ${conn.connection.host}`);
+    
+    // Handle connection events
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB connection error:', err);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.log('⚠️  MongoDB disconnected. Attempting to reconnect...');
+    });
+
+    mongoose.connection.on('reconnected', () => {
+      console.log('✅ MongoDB reconnected');
+    });
+
+  } catch (error) {
+    console.error('❌ MongoDB initial connection error:', error);
+    // Don't exit the process, let the app continue with potential fallback
+    console.log('⚠️  Server starting without database connection');
+  }
+};
+
+// Initialize database connection
+connectDB();
+
+// Socket.io connection handling
+const realTimeEvents = new RealTimeEvents(io);
+
+io.on('connection', (socket) => {
+  console.log('👤 User connected:', socket.id);
+
+  // Handle user authentication and join personal room
+  socket.on('authenticate', (userId) => {
+    socket.userId = userId;
+    socket.join(`user_${userId}`);
+    console.log(`👤 User ${userId} authenticated and joined personal room`);
+    
+    // Send confirmation
+    socket.emit('authenticated', { userId, socketId: socket.id });
+  });
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log('👤 User disconnected:', socket.id);
+  });
+
+  // Handle subscription events
+  socket.on('subscribe_to_updates', (data) => {
+    console.log('📡 User subscribed to updates:', data);
+  });
 });
+
+// Make realTimeEvents available globally
+global.realTimeEvents = realTimeEvents;
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -139,8 +219,8 @@ process.on('SIGINT', () => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
 });
 
-module.exports = app;
+module.exports = { app, server, io };

@@ -90,6 +90,11 @@ const createSubscription = asyncHandler(async (req, res) => {
 
   await subscription.populate('plan user');
 
+  // Emit real-time event for subscription creation
+  if (global.realTimeEvents) {
+    global.realTimeEvents.subscriptionCreated(req.user._id.toString(), subscription);
+  }
+
   res.status(201).json({
     status: 'success',
     message: 'Subscription created successfully',
@@ -240,6 +245,11 @@ const cancelSubscription = asyncHandler(async (req, res) => {
     { refundEligible: isRefundEligible }
   );
 
+  // Emit real-time event for subscription cancellation
+  if (global.realTimeEvents) {
+    global.realTimeEvents.subscriptionCancelled(req.user._id.toString(), subscription);
+  }
+
   res.status(200).json({
     status: 'success',
     message: 'Subscription cancelled successfully',
@@ -314,6 +324,16 @@ const upgradePlan = asyncHandler(async (req, res) => {
   );
 
   await subscription.populate('plan');
+
+  // Emit real-time event for subscription upgrade
+  if (global.realTimeEvents) {
+    global.realTimeEvents.subscriptionModified(req.user._id.toString(), subscription, {
+      type: 'upgrade',
+      oldPlan: oldPlan.name,
+      newPlan: newPlan.name,
+      additionalCost
+    });
+  }
 
   res.status(200).json({
     status: 'success',

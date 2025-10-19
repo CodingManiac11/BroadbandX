@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, LoginCredentials } from '../types';
 import { authService } from '../services/authService';
 import { tokenManager } from '../services/api';
+import webSocketService from '../services/webSocketService';
 
 interface AuthContextType {
   user: User | null;
@@ -38,6 +39,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const userData = await authService.getCurrentUser();
             console.log('Token validation successful, user:', userData);
             setUser(userData);
+            
+            // Authenticate with WebSocket for existing session
+            webSocketService.authenticate(userData._id);
           } catch (err) {
             console.error('Token validation failed:', err);
             // Token is invalid or expired
@@ -62,9 +66,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(null); // Clear any previous errors
       console.log('Login attempt:', email);
       
-      // Clear any existing tokens first
+      // Clear any existing tokens and user state first
       tokenManager.clearTokens();
       setUser(null);
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('token'); // Legacy token key
       
       // Use the authService for login instead of direct fetch
       const credentials: LoginCredentials = { email, password };
@@ -79,8 +87,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       tokenManager.setToken(authResponse.tokens.accessToken);
       tokenManager.setRefreshToken(authResponse.tokens.refreshToken);
       
+      // Store additional user info for backward compatibility
+      localStorage.setItem('userId', authResponse.user._id);
+      localStorage.setItem('userRole', authResponse.user.role);
+      localStorage.setItem('user', JSON.stringify(authResponse.user));
+      
       // Update user in state
       setUser(authResponse.user);
+      
+      // Authenticate with WebSocket
+      webSocketService.authenticate(authResponse.user._id);
       
       // Force the authenticated state to update immediately
       setTimeout(() => {
@@ -94,6 +110,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setError(err instanceof Error ? err.message : 'Login failed');
       // Clear tokens on error
       tokenManager.clearTokens();
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('token');
       setUser(null);
       throw err;
     } finally {
@@ -128,16 +148,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
+      console.log('Starting logout process');
+      setLoading(true);
+      
       // Make actual logout API call
       const token = tokenManager.getToken();
       if (token) {
-        await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/logout`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        });
+        try {
+          await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/logout`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            }
+          });
+          console.log('Server logout successful');
+        } catch (logoutError) {
+          console.warn('Server logout failed, continuing with local cleanup:', logoutError);
+        }
       }
     } catch (error) {
       console.error('Logout error:', error);
@@ -147,11 +175,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(null);
       setError(null);
       tokenManager.clearTokens();
+      setLoading(false);
       
-      // Force a small delay to ensure state is cleared
-      setTimeout(() => {
-        console.log('Auth cleanup complete');
-      }, 100);
+      // Disconnect WebSocket
+      webSocketService.disconnect();
+      
+      // Additional cleanup - clear all localStorage items that might cause issues
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('token'); // Legacy token key
+      
+      console.log('Logout complete');
     }
   };
 

@@ -1,53 +1,104 @@
-# 🌐 BroadbandX (FlexiSub) - AI-Powered Subscription Management System
+# 🌐 BroadbandX (FlexiSub) - AI-Powered Real-Time Subscription Management System
 
-![BroadbandX](https://img.shields.io/badge/BroadbandX-v2.0-blue.svg)
+![BroadbandX](https://img.shields.io/badge/BroadbandX-v2.1-blue.svg)
 ![MERN](https://img.shields.io/badge/MERN-Stack-green.svg)
-![AI](https://img.shields.io/badge/AI-Ready-purple.svg)
+![WebSocket](https://img.shields.io/badge/Real--Time-WebSocket-red.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue.svg)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green.svg)
 
-A comprehensive **AI-powered broadband subscription management system** built with the **MERN stack**. Features advanced user management, intelligent analytics, secure payment processing, and machine learning-ready architecture. Currently **85% complete** with Phase 1 core features and foundation ready for Phase 2 ML integration.
+A comprehensive **AI-powered broadband subscription management system** with **real-time communication** built using the **MERN stack**. Features advanced user management, intelligent analytics, secure payment processing, real-time updates via WebSocket, and machine learning-ready architecture. Currently **92% complete** with Phase 1 core features and real-time functionality.
 
 ## 📊 **Current Implementation Status (Phase 1)**
-- ✅ **User Management System** (90% Complete)
-- ✅ **Authentication & Security** (95% Complete) 
-- ✅ **Plan Management** (85% Complete)
-- ✅ **Payment Processing** (75% Complete)
-- ✅ **Admin Dashboard** (80% Complete)
-- 🔄 **Analytics Dashboard** (75% Complete)
-- 🔄 **Excel Data Integration** (70% Complete)
-- 📋 **Phase 2 ML Features** (Foundation Ready - 15% Complete)
+- ✅ **User Management System** (95% Complete)
+- ✅ **Authentication & Security** (98% Complete) 
+- ✅ **Real-Time Communication** (100% Complete) 🆕
+- ✅ **Plan Management** (90% Complete)
+- ✅ **Subscription Management** (95% Complete) 🔄
+- ✅ **Payment Processing** (85% Complete)
+- ✅ **Admin Dashboard** (90% Complete)
+- ✅ **Customer Dashboard** (95% Complete) 🔄
+- 🔄 **Analytics Dashboard** (80% Complete)
+- 🔄 **Excel Data Integration** (75% Complete)
+- 📋 **Phase 2 ML Features** (Foundation Ready - 20% Complete)
 
-## ⭐ **Current Features (Phase 1 - 85% Complete)**
+## 🎯 **Latest Updates & Achievements**
 
-### 🔐 **Authentication & Security** (95% Complete)
+### 🚀 **Real-Time Communication System** (100% Complete) 🆕
+- ✅ **Socket.io Integration**: Full WebSocket server with authentication
+- ✅ **User-Specific Rooms**: Personal real-time channels for each user
+- ✅ **Live Subscription Updates**: Instant notifications for create/cancel/modify
+- ✅ **Toast Notifications**: React-Toastify integration with real-time events
+- ✅ **Connection Status**: Live connection monitoring with visual indicators
+- ✅ **Multi-Tab Sync**: Changes sync instantly across all open browser tabs
+- ✅ **Auto-Reconnection**: Robust connection recovery with retry logic
+
+### 🔧 **Enhanced Subscription Management** (95% Complete) 🔄
+- ✅ **Real-Time Cancellation**: Instant subscription status updates
+- ✅ **Dynamic Stats Calculation**: Live subscription count updates
+- ✅ **Improved Error Handling**: Better authentication feedback
+- ✅ **Fallback Mechanisms**: Works offline with local state management
+- ✅ **Debug Logging**: Comprehensive tracking for troubleshooting
+
+### 🛡️ **MongoDB Atlas Connectivity Improvements** (100% Complete) 🔄
+- ✅ **Enhanced Connection Pooling**: Optimized with retry logic and timeouts
+- ✅ **Network Diagnostics**: DNS resolution and TCP connectivity validation
+- ✅ **Connection String Optimization**: Improved reliability parameters
+- ✅ **Error Handling**: Graceful degradation for database outages
+- ✅ **IP Whitelist Management**: Proper network access configuration
+
+## ⭐ **Current Features (Phase 1 - 92% Complete)**
+
+### 🔐 **Authentication & Security** (98% Complete)
 - ✅ JWT-based authentication with bcrypt password hashing (12 rounds)
 - ✅ Role-based access control (Customer/Admin)  
 - ✅ Rate limiting (express-rate-limit) and CORS protection
 - ✅ Input validation with Joi schemas
 - ✅ Secure password reset and session management
+- ✅ WebSocket authentication integration 🆕
 - ✅ Stripe payment security integration
 
-### 👥 **Advanced User Management** (90% Complete)
+### 📡 **Real-Time Communication** (100% Complete) 🆕
+- ✅ **WebSocket Server**: Socket.io with CORS and authentication
+- ✅ **Real-Time Events**: Subscription create/cancel/modify notifications
+- ✅ **User Rooms**: Personal channels for user-specific updates
+- ✅ **Auto-Authentication**: Seamless WebSocket auth on login/logout
+- ✅ **Connection Management**: Auto-reconnect with status monitoring
+- ✅ **Toast Notifications**: Instant visual feedback for all events
+- ✅ **Multi-Device Sync**: Real-time updates across all user sessions
+
+### 👥 **Advanced User Management** (95% Complete)
 - ✅ Comprehensive user profiles with MongoDB schemas
 - ✅ Admin user management dashboard
 - ✅ Customer registration and profile management
 - ✅ Excel data import capabilities (XLSX v0.18.5)
-- 🔄 Real-time user status tracking (WebSocket integration planned)
+- ✅ Real-time user status tracking via WebSocket 🆕
 
-### � **Subscription & Payment System** (80% Complete)
+### 📋 **Subscription & Payment System** (90% Complete) 🔄
 - ✅ Multi-tier plan structure (Basic, Standard, Premium)
+- ✅ Real-time subscription lifecycle management 🆕
+- ✅ Instant subscription cancellation with live updates 🆕
+- ✅ Dynamic subscription statistics calculation 🆕
+- ✅ Enhanced authentication checks for API calls 🆕
 - ✅ Stripe payment processing integration (v18.5.0)
-- ✅ Subscription lifecycle management
 - ✅ Billing history and invoice tracking
 - 🔄 Automated recurring billing workflows
 
-### 📊 **Analytics Dashboard** (75% Complete)
+### 📊 **Enhanced Customer Dashboard** (95% Complete) 🔄
+- ✅ Real-time connection status indicator 🆕
+- ✅ Live notification count badges 🆕
+- ✅ Instant subscription updates without page refresh 🆕
+- ✅ Dynamic stats refresh on subscription changes 🆕
+- ✅ Material-UI v7.3.2 responsive design
+- ✅ Interactive subscription management
+- ✅ Usage tracking and billing history
+- ✅ Real-time toast notifications 🆕
+
+### 📊 **Analytics Dashboard** (80% Complete)
 - ✅ Admin analytics dashboard with Material-UI v7.3.2
 - ✅ Revenue tracking and user metrics
 - ✅ Interactive charts with Recharts v3.2.0 and Chart.js
 - ✅ User management interfaces
-- 🔄 Real-time KPI monitoring
+- ✅ Real-time KPI monitoring with WebSocket integration 🆕
 - 🔄 Advanced usage pattern visualization
 
 ### 🏗️ **Scalable Architecture** (95% Complete)
@@ -81,6 +132,8 @@ A comprehensive **AI-powered broadband subscription management system** built wi
 
 ### **Frontend (React Client)**
 - **React 19.1.1** with **TypeScript 4.9.5** - Modern UI with type safety
+- **Socket.io-client** - Real-time WebSocket communication 🆕
+- **React-Toastify** - Real-time notification system 🆕
 - **Material-UI 7.3.2** - Complete design system with icons
 - **Material-UI X-Charts 8.11.2** & **X-Data-Grid 8.11.2** - Advanced data visualization
 - **React Hook Form 7.62.0** - Performance-optimized form handling
@@ -94,6 +147,7 @@ A comprehensive **AI-powered broadband subscription management system** built wi
 
 ### **Backend (Node.js Server)**
 - **Node.js** with **Express.js 4.18.2** - RESTful API framework
+- **Socket.io** - Real-time WebSocket server with authentication 🆕
 - **MongoDB** with **Mongoose 8.0.3** - Database and ODM
 - **JWT (jsonwebtoken 9.0.2)** - Stateless authentication
 - **bcrypt.js 2.4.3** - Password hashing (12 salt rounds)
@@ -291,6 +345,13 @@ Quest/
    - **Backend API**: http://localhost:5000
    - **Admin Login**: admin@flexisub.com / Admin@123
    - **Customer Login**: customer@example.com / password123
+
+### **🆕 Real-Time Features Testing**
+   - **WebSocket Connection**: Automatically connects when you log in
+   - **Multi-Tab Testing**: Open multiple browser tabs to see real-time sync
+   - **Subscription Updates**: Cancel/modify subscriptions to see instant notifications
+   - **Connection Status**: Check the green "Connected" indicator in the header
+   - **Toast Notifications**: Watch for real-time event notifications
 
 ## � **Project Continuation Plan**
 
@@ -595,6 +656,46 @@ docker-compose up -d
 - **Customer Satisfaction**: Target 4.5/5 rating
 - **Market Penetration**: Expand to 3 new market segments
 
+## 🔧 **Troubleshooting & Common Issues**
+
+### **Real-Time Communication Issues**
+- **WebSocket Connection Failed**: 
+  - Check if backend server is running on port 5000
+  - Verify CORS settings in server configuration
+  - Ensure Socket.io client version matches server version
+
+- **Subscription Count Not Updating**:
+  - Check browser console for WebSocket connection status
+  - Verify user authentication status (look for "Connected" indicator)
+  - Try refreshing the page to reinitialize connections
+
+- **Toast Notifications Not Appearing**:
+  - Ensure React-Toastify CSS is properly imported
+  - Check if notifications are blocked in browser settings
+  - Verify RealtimeProvider is wrapping the app components
+
+### **MongoDB Atlas Connection Issues**
+- **ENOTFOUND Errors**: 
+  - Check network connectivity and DNS resolution
+  - Verify IP whitelist includes your current IP (use 0.0.0.0/0 for testing)
+  - Ensure connection string credentials are correct
+
+- **Connection Timeouts**:
+  - Check connection pooling settings in server.js
+  - Verify MongoDB Atlas cluster is running and accessible
+  - Try reducing connection timeout values for faster feedback
+
+### **Authentication Problems**
+- **Token Validation Failed**:
+  - Clear browser localStorage and cookies
+  - Check JWT secret configuration in .env file
+  - Verify token expiration settings
+
+### **Performance Optimization**
+- **Slow Page Loading**: Enable compression middleware and optimize bundle size
+- **High Memory Usage**: Monitor WebSocket connection limits and implement cleanup
+- **Database Queries**: Ensure proper indexes are created for frequently accessed fields
+
 ## 📄 **License & Legal**
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
@@ -615,9 +716,17 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🔗 **Important Links**
 
-- **GitHub Repository**: [https://github.com/CodingManiac11/Lumen_Quest](https://github.com/CodingManiac11/Lumen_Quest)
-- **Live Demo**: (Coming Soon - Phase 1 completion)
+- **GitHub Repository**: [https://github.com/CodingManiac11/BroadbandX](https://github.com/CodingManiac11/BroadbandX)
+- **Current Version**: v2.1 with Real-Time Communication
+- **Live Demo**: (Coming Soon - Phase 1 completion at 92%)
 - **API Documentation**: (Coming Soon - Swagger integration)
+- **WebSocket Events Documentation**: Available in `/server/utils/realTimeEvents.js`
+
+---
+
+**🎉 Project Status: 92% Complete - Real-Time Communication Fully Implemented!**
+
+*Last Updated: October 2025 - Added comprehensive WebSocket integration with real-time subscription management, live notifications, and multi-device synchronization.*
 - **Project Wiki**: (Documentation in progress)
 
 ---

@@ -67,10 +67,10 @@ const UPIPaymentForm: React.FC<UPIPaymentFormProps> = ({ plan, onSuccess, onCanc
       console.log('  - Plan.name:', plan.name);
       console.log('  - Plan.pricing:', plan.pricing);
       console.log('  - Subscription data being sent:', subscriptionData);
-      console.log('  - API endpoint: /customer/subscriptions');
+      console.log('  - API endpoint: /subscriptions');
 
       // Call the subscription creation API using the configured API client
-      const response = await apiClient.post('/customer/subscriptions', subscriptionData);
+      const response = await apiClient.post('/subscriptions', subscriptionData);
       const result = handleApiResponse(response);
 
       console.log('✅ Subscription created successfully:', result);
